@@ -12,46 +12,51 @@ namespace Vidly.Controllers
     public class MoviesController : Controller
     {
         // GET: Movies/Random
-        public ActionResult Random()
+        public ActionResult MovieTable()
         {
-            var movie = new Movie() { Name = "Shrek!" };
-            var customers = new List<Customer>
+            var movie = GetMovies();
+            var viewModel = new MovieTableViewModel
             {
-                new Customer {Name = "Customer 1"},
-                new Customer {Name = "Customer 2"},
-                new Customer {Name = "Customer 3"}
-            };
-
-            var viewModel = new RandomMovieViewModel
-            {
-                Movie = movie,
-                Customers = customers
+                Movies = movie
             };
 
             return View(viewModel);
         }
 
-        public ActionResult Edit(int id)
+        public ActionResult MovieDetails(int? id)
         {
-            return Content("id = " + id);
+            var movie = GetMovies().SingleOrDefault(m => m.Id == id);
+            if (movie == null)
+                return HttpNotFound();
+
+            return View(movie);
         }
 
-        public ActionResult Index(int? pageIndex, string sortBy)
+
+        private List<Movie> GetMovies()
         {
-            if (!pageIndex.HasValue)
-                pageIndex = 1;
-
-            if (sortBy.IsNullOrWhiteSpace())
-                sortBy = "Name";
-
-            return Content(String.Format("pageIndex={0}&sortBy={1}", pageIndex, sortBy));
+            return new List<Movie>
+            {
+                new Movie {Id = 1, Name = "Shrek!"},
+                new Movie {Id = 2, Name = "Wall-e"}
+            };
 
         }
 
         [Route("movies/released/{year:regex(\\d{4})}/{month:regex(\\d{2}):range(1, 12)}")]
-        public ActionResult ByReleaseDate(int year, int month) 
+        public ActionResult ByReleaseDate(int year, int month)
         {
-            return Content(year + "/" + month); 
+            return Content(year + "/" + month);
         }
     }
+
+
+
+
+
+
+
+    
+
+       
 }
