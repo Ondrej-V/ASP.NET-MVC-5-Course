@@ -13,12 +13,8 @@ namespace Vidly.Controllers
         // GET: Customers
         public ActionResult CustomerTable()
         {
-            var customers = new List<Customer>
-            {
-                new Customer {Name = "Johny", Id = 1},
-                new Customer {Name = "Mary", Id = 2}
-            };
-
+            var customers = GetCustomers();
+            
             var viewModel = new CustomerTableViewModel
             {
                 Customers = customers
